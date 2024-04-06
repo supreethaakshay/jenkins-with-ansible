@@ -19,7 +19,7 @@ pipeline {
     //Run the playbook
     stage('RunPlaybook') {
       steps {
-        sh "ansible-playbook -i inventory/icicibank.hosts --private-key=AWSEC2_PRIVATEKEY playbooks/installTomcat.yml --ssh-common-args='-oStrictHostKeyChecking=no'"
+        sh "ansible-playbook -i inventory/icicibank.hosts --private-key=$AWSEC2_PRIVATEKEY playbooks/installTomcat.yml --ssh-common-args='-oStrictHostKeyChecking=no'"
       }
     }
   
