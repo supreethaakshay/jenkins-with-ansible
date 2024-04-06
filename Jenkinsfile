@@ -1,27 +1,27 @@
-pipeline {
-  agent { 
-  label 'ansiblenode'
-  }
-  
-  environment {
-   AWS_EC2_PRIVATE_KEY=credentials('ec2-private-key') 
-  }
-  
-  stages {
-    
-    //Get the Code from GitHub Repo
-    stage('CheckOutCode'){
-      steps{
-        git credentialsId: '18717454-299b-45e2-9661-25fdd6635924', url: 'https://github.com/supreethaakshay/jenkins-with-ansible.git
-      }
+pipeline{
+
+    agent{
+    label 'ansiblenode'
     }
-     
-    //Run the playbook
-    stage('RunPlaybook') {
-      steps {
-        sh "ansible-playbook -i inventory/icicibank.hosts --private-key=$AWSEC2_PRIVATEKEY playbooks/installTomcat.yml --ssh-common-args='-oStrictHostKeyChecking=no'"
-      }
+
+    environment{
+        AWSEC2_PRIVATEKEY=credentials('ec2-private-key')
     }
-  
-  }//stages closing
-}//pipeline closing
+
+    stages{
+        stage('CheckoutCode'){
+            steps{
+                git credentialsId: '18717454-299b-45e2-9661-25fdd6635924', url: 'https://github.com/supreethaakshay/jenkins-with-ansible.git'
+
+            }
+        }
+
+        stage('RunAnsiblePlaybook'){
+            steps{
+                sh "ansible-playbook -i inventory/icicibank.hosts --private-key=$AWSEC2_PRIVATEKEY playbooks/installTomcat.yml --ssh-common-args='-o StrictHostKeyChecking=no'"
+                
+            }
+        }
+
+    }
+}
